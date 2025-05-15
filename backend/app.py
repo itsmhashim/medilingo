@@ -21,7 +21,7 @@ app = FastAPI()
 #  Enable CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://medilingo-psi.vercel.app"],
+    allow_origins=["https://medilingo-psi.vercel.app","*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -132,7 +132,7 @@ async def translate(req: TranslationRequest):
 VOICE_IDS = {
     "en": "Rachel",
     "es": "Antoni",
-    "ch": "Li",
+    "zh": "Li",
     "fr": "Celine",
     "hi": "Prem",   # if available
     # "ur": None  # not available
@@ -160,8 +160,10 @@ async def speak(request: Request):
 
     headers = {
         "xi-api-key": ELEVEN_API_KEY,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "Accept": "audio/mpeg"
     }
+
     payload = {
         "text": text,
         "model_id": "eleven_multilingual_v1",
