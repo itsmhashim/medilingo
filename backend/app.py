@@ -21,11 +21,12 @@ app = FastAPI()
 #  Enable CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # For production, restrict to your frontend domain
+    allow_origins=["https://medilingo-psi.vercel.app"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 
 #  TRANSCRIBE ENDPOINT
 @app.post("/transcribe")
