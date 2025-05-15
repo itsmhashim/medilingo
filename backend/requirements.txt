@@ -1,7 +1,4 @@
 fastapi
 uvicorn
 python-dotenv
-os
-tempfile
-traceback
-pydantic
+requests
