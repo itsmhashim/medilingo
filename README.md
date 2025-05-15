@@ -8,7 +8,7 @@ MediLingo is a mobile-first web app that enables real-time, multilingual convers
 
 ## 🚀 Live Demo
 
-🔗 **Vercel**: [https://medilingo.vercel.app](https://medilingo.vercel.app)
+🔗 **Vercel**: [https://medilingo-psi.vercel.app](https://medilingo.vercel.app)
 
 ---
 
