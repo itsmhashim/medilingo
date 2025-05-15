@@ -108,9 +108,6 @@ Open browser to: `http://localhost:5500`
 - ✅ Error handling (timeouts, TTS fallback)
 - ✅ Full code + documentation on GitHub
 
----
-
-## 📅 Built: May 15, 2025
 
 ---
 
