@@ -85,47 +85,50 @@ async def translate(req: TranslationRequest):
 
     res = None
 
-    try:
-        res = requests.post(
-            "https://openrouter.ai/api/v1/chat/completions",
-            headers={
-                "Authorization": f"Bearer {OPENROUTER_API_KEY}",
-                "Content-Type": "application/json"
-            },
-            json={
-                "model": "google/gemma-3-27b-it:free",
-                "messages": [
-                    {"role": "system", "content": "You are a professional medical translator."},
-                    {"role": "user", "content": prompt}
-                ],
-                "temperature": 0.3
-            },
-            timeout=30
-        )
-        res.raise_for_status()
-        data = res.json()
+    models_to_try = [
+        "meta-llama/llama-4-maverick:free",
+        "qwen/qwen3-235b-a22b:free",
+        "openai/gpt-4o-mini"
+    ]
 
-        #  Check for error
-        if "choices" not in data:
-            print("❌ Translation failed, OpenRouter said:", data)
-            return {"translated": "[Translation failed]",
-                    "error": data.get("error", {}).get("message", "Unknown error")}
+    for model in models_to_try:
+        try:
+            res = requests.post(
+                "https://openrouter.ai/api/v1/chat/completions",
+                headers={
+                    "Authorization": f"Bearer {OPENROUTER_API_KEY}",
+                    "Content-Type": "application/json"
+                },
+                json={
+                    "model": model,
+                    "messages": [
+                        {"role": "system", "content": "You are a professional medical translator."},
+                        {"role": "user", "content": prompt}
+                    ],
+                    "temperature": 0.3
+                },
+                timeout=30
+            )
+            res.raise_for_status()
+            data = res.json()
 
-        translated = data["choices"][0]["message"]["content"].strip()
-        print("🌍 Translated:", translated)
-        return {"translated": translated}
+            if "choices" in data:
+                translated = data["choices"][0]["message"]["content"].strip()
+                print(f"🌍 Translated using {model}:", translated)
+                return {"translated": translated}
+            else:
+                print(f"❌ No choices in response from {model}:", data)
 
+        except Exception as e:
+            print(f"🔥 Translation error with {model}:", str(e))
+            if res is not None:
+                try:
+                    print("📥 OpenRouter raw response:", res.text)
+                except Exception as inner_err:
+                    print("⚠️ Failed to read res.text:", str(inner_err))
+            continue  # try next model
 
-    except Exception as e:
-        print("🔥 Translation error:", str(e))
-        traceback.print_exc()
-        if res is not None:
-            try:
-                print("📥 OpenRouter raw response:", res.text)
-            except Exception as inner_err:
-                print("⚠️ Failed to read res.text:", str(inner_err))
-        return {"translated": "[Translation failed]", "error": str(e)}
-
+    return {"translated": "[Translation failed]", "error": "All models failed"}
 
 
 
