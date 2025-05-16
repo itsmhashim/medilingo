@@ -79,8 +79,9 @@ class TranslationRequest(BaseModel):
 async def translate(req: TranslationRequest):
     print("📥 /translate endpoint hit")
     prompt = (
-        f"You are a medical translator. Translate the following text from {req.from_lang} to {req.to_lang}. "
-        f"Only return the translated sentence:\n\n\"{req.text}\""
+        f"You are a professional medical translator. Translate the following sentence from {req.from_lang} to {req.to_lang}. "
+        f"Return only the translated sentence. Do not include explanations, quotation marks, or language notes. Just return the translation:\n\n"
+        f"{req.text}"
     )
 
     res = None
@@ -102,7 +103,7 @@ async def translate(req: TranslationRequest):
                 json={
                     "model": model,
                     "messages": [
-                        {"role": "system", "content": "You are a professional medical translator."},
+                        {"role": "system", "content": "You are a professional medical translator. Output only the translated sentence. No explanations, no quotes, just plain translation."},
                         {"role": "user", "content": prompt}
                     ],
                     "temperature": 0.3
