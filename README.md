@@ -111,6 +111,17 @@ Open browser to: `http://localhost:5500`
 
 ---
 
+## ⚠️ Cold Start Notice
+
+MediLingo's backend is hosted on [Render](https://render.com) using the free tier.  
+To conserve resources, the server may enter sleep mode after a period of inactivity.
+
+> As a result, the **first request may fail and refresh is required** so the backend wakes up.
+
+This behavior is expected on free-tier deployments and does not impact overall functionality.
+
+---
+
 ## 🧑‍💻 Developed by
 
 Muhammad Hashim   
